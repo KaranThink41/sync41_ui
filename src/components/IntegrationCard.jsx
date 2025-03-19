@@ -1,11 +1,12 @@
+// src/components/IntegrationCard.jsx
 import React from "react";
 import { motion } from "framer-motion";
 import GmailLogo from "../assets/gmail.svg";
 import GoogleDriveLogo from "../assets/google-drive.svg";
 import SlackLogo from "../assets/slack.svg";
-import WhatsAppLogo from "../assets/whatsapp.svg";
 import OutlookLogo from "../assets/outlook.svg";
 import GoogleCalendarLogo from "../assets/google-calendar.svg";
+import GitHubLogo from "../assets/github.svg"; // Add GitHub logo asset
 import { useTheme } from "../layouts/ThemePage";
 import Button from "../components/Button"; // Import the Button component
 
@@ -26,8 +27,8 @@ export default function IntegrationCard({
         return <img src={GoogleDriveLogo} alt="Google Drive Logo" className="w-10 h-10 mx-auto" />;
       case "Slack":
         return <img src={SlackLogo} alt="Slack Logo" className="w-10 h-10 mx-auto" />;
-      case "WhatsApp":
-        return <img src={WhatsAppLogo} alt="WhatsApp Logo" className="w-10 h-10 mx-auto" />;
+      case "GitHub":
+        return <img src={GitHubLogo} alt="GitHub Logo" className="w-10 h-10 mx-auto" />;
       case "Outlook":
         return <img src={OutlookLogo} alt="Outlook Logo" className="w-10 h-10 mx-auto" />;
       case "Google Calendar":
@@ -72,7 +73,7 @@ export default function IntegrationCard({
 
       <Button 
         onClick={() => onConnect(service.name)}
-        variant={service.isConnected ? "outline" : "primary"} // Use outline for disconnect
+        variant={service.isConnected ? "outline" : "primary"}
         fullWidth
       >
         {service.isConnected ? "Disconnect" : "Connect"}

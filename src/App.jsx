@@ -14,7 +14,7 @@ import PaddingInternalPages from "./layouts/PaddingInternalPages"; // New layout
 
 function App() {
   // For demonstration, authenticated is true.
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <ThemePage>

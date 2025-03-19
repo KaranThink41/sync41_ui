@@ -13,7 +13,7 @@ function ProtectedRoute({ children }) {
       const token = localStorage.getItem(ACCESS_TOKEN_KEY);
       // If no token, user is NOT authenticated
       if (!token) {
-        if (isMounted) setAuthState(true);
+        if (isMounted) setAuthState(false);
         return;
       }
       // Otherwise, if a token is found, assume it's valid (for now).

@@ -5,10 +5,10 @@ import { FiCheckCircle, FiXCircle } from "react-icons/fi";
 import { 
   FaGoogle, 
   FaSlack, 
-  FaWhatsapp, 
   FaMicrosoft, 
   FaCalendarAlt,
-  FaGoogleDrive
+  FaGoogleDrive,
+  FaGithub
 } from "react-icons/fa";
 import IntegrationCard from "../components/IntegrationCard";
 import ThemePage, { useTheme } from "../layouts/ThemePage";
@@ -21,7 +21,7 @@ const IntegrationPage = () => {
     { name: "Gmail", icon: FaGoogle, isConnected: false, lastSynced: null, autoSync: false, error: null },
     { name: "Google Drive", icon: FaGoogleDrive, isConnected: false, lastSynced: null, autoSync: false, error: null },
     { name: "Slack", icon: FaSlack, isConnected: false, lastSynced: null, autoSync: false, error: null },
-    { name: "WhatsApp", icon: FaWhatsapp, isConnected: false, lastSynced: null, autoSync: false, error: null },
+    { name: "GitHub", icon: FaGithub, isConnected: false, lastSynced: null, autoSync: false, error: null },
     { name: "Outlook", icon: FaMicrosoft, isConnected: false, lastSynced: null, autoSync: false, error: null },
     { name: "Google Calendar", icon: FaCalendarAlt, isConnected: false, lastSynced: null, autoSync: false, error: null },
   ]);
@@ -80,7 +80,7 @@ const IntegrationPage = () => {
   };
 
   return (
-    <ErrorBoundary> {/* Wrap with ErrorBoundary */}
+    <ErrorBoundary>
       <ThemePage>
         <PaddingInternalPages>
           <motion.div
@@ -118,7 +118,6 @@ const IntegrationPage = () => {
                 ))}
               </motion.div>
 
-              {/* Confirmation Popup with inline style */}
               <AnimatePresence>
                 {popup.show && (
                   <motion.div
@@ -135,7 +134,7 @@ const IntegrationPage = () => {
                       className="p-8 rounded-lg shadow-xl max-w-md w-full"
                       style={{ 
                         boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.1)",
-                        backgroundColor: "#FFFFFF", // White background for the popup
+                        backgroundColor: "#FFFFFF",
                         color: colors.text,
                       }}
                     >
@@ -200,7 +199,7 @@ const IntegrationPage = () => {
           </motion.div>
         </PaddingInternalPages>
       </ThemePage>
-    </ErrorBoundary> 
+    </ErrorBoundary>
   );
 };
 
