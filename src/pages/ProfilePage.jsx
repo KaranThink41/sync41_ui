@@ -436,13 +436,12 @@ export default function ProfilePage() {
                       <ServiceItem key={service.id} service={service} />
                     ))}
                   </div>
-                  <Button
+                  <span
+                    className="text-[#1D72D1] font-bold text-center block mx-auto hover:text-[#6D3BF5] cursor-pointer mt-4"
                     onClick={() => navigate("/schedule/integrations")}
-                    variant="primary"
-                    fullWidth
                   >
                     Connect New Service
-                  </Button>
+                  </span>
                 </div>
               </div>
             </div>
@@ -467,7 +466,7 @@ const SettingItem = ({ icon, title, description, onEdit }) => {
           <p className="text-lg font-bold text-gray-500" style={{ fontSize: '16px' }}>{description}</p>
         </div>
       </div>
-      <button onClick={onEdit} className="text-lg font-bold transition-colors" style={{ fontSize: '16px', color: colors.primary }}>
+      <button onClick={onEdit} className="text-lg font-bold transition-colors text-[#1D72D1] hover:text-[#6D3BF5]" style={{ fontSize: '16px' }}>
         Edit
       </button>
     </div>
@@ -477,10 +476,7 @@ const SettingItem = ({ icon, title, description, onEdit }) => {
 const ServiceItem = ({ service }) => {
   const { colors } = useTheme();
   return (
-    <motion.div
-      whileHover={{ translateX: 4 }}
-      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100"
-    >
+    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
       <div className="flex items-center space-x-3">
         <div className="p-2 bg-white rounded-lg shadow-sm">{service.icon}</div>
         <div>
@@ -492,12 +488,6 @@ const ServiceItem = ({ service }) => {
           </p>
         </div>
       </div>
-      <span
-        className="px-2 py-1 text-xs font-bold rounded-full"
-        style={{ backgroundColor: "#EFDFBB", color: colors.primary }}
-      >
-        {service.status}
-      </span>
-    </motion.div>
+    </div>
   );
 };

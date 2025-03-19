@@ -14,6 +14,9 @@ import {
 import ThemePage, { useTheme } from "../layouts/ThemePage";
 import PaddingInternalPages from "../layouts/PaddingInternalPages";
 import Button from "../components/Button";
+import { CloudCog } from "lucide-react";
+
+const backendUrl = "http://13.203.173.137:3000";
 
 // Helper to format ISO date/time
 function formatDateTime(isoString) {
@@ -28,6 +31,11 @@ function formatDateTime(isoString) {
   return date.toLocaleDateString("en-US", options);
 }
 
+// Function to generate random string
+function getRandomString(length) {
+  return [...Array(length)].map(() => Math.random().toString(36)[2]).join("");
+}
+
 export default function SchedulePage() {
   const navigate = useNavigate();
   const { colors } = useTheme();
@@ -36,6 +44,11 @@ export default function SchedulePage() {
   const [command, setCommand] = useState("");
   const [scheduleDate, setScheduleDate] = useState("");
   const [scheduleTime, setScheduleTime] = useState("");
+  const [error, setError] = useState("");
+  const [session_id, setSession_id] = useState("");
+  const [logs, setLogs] = useState([]);
+  const [isSSEconnected, setIsSSEconnected] = useState(false);
+  const [promptRespone, setPromptRespone] = useState("Response here");
 
   // Task list
   const [scheduledTasks, setScheduledTasks] = useState([]);
@@ -59,6 +72,91 @@ export default function SchedulePage() {
   const [taskCategory, setTaskCategory] = useState("Work");
   const [recurrence, setRecurrence] = useState("none");
   const [dueDate, setDueDate] = useState("");
+
+  // Prompt request function
+  async function callPrompt(input, session_id) {
+    const requestBody = {
+      input: input,
+      session_id: session_id,
+    };
+    try {
+      const response = await fetch(`${backendUrl}/prompt`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Prompt function call response: ", result);
+        return result;
+      }
+    } catch (error) {
+      console.error("Failed to send prompt request: ", console.error);
+    }
+  }
+
+  // Handle run prompt now
+  const handleRunTask = async () => {
+    console.log(`Handle run called with command : ${command}`);
+    setLogs([]);
+    if (command === "") {
+      setError("Command is required");
+      return;
+    }
+    const sessid = getRandomString(10);
+    setSession_id(sessid);
+    // Log session id
+    console.log(`Session id set as ${sessid}`);
+    // Start event stream for logs
+    const waitForSSE = new Promise((resolve, reject) => {
+      const eventSource = new EventSource(`${backendUrl}/logevents/${sessid}`);
+
+      eventSource.onopen = () => {
+        console.log("SSE connection opened");
+        setIsSSEconnected(true);
+        resolve(eventSource); // Resolve the promise when connected
+      };
+
+      eventSource.onmessage = (event) => {
+        const parsedData = JSON.parse(event.data);
+        console.log("Message received: ", parsedData);
+        if (parsedData.response) {
+          setLogs((prevLogs) => [...prevLogs, parsedData.response]);
+        }
+        if (parsedData.step_type === "execute_action") {
+          setLogs((prevLogs) => [
+            ...prevLogs,
+            "Executing tool: " + parsedData.executed_action_id,
+          ]);
+        }
+      };
+
+      eventSource.onerror = (error) => {
+        console.error("SSE error: ", error);
+        setError(error);
+        eventSource.close();
+        reject(error); // Reject the promise on error
+      };
+
+      eventSource.addEventListener("complete", (event) => {
+        console.log("Session completed:", event.data);
+        eventSource.close();
+        setIsSSEconnected(false);
+      });
+    });
+    // Send prompt to backend
+    try {
+      const eventSource = await waitForSSE;
+      const result = await callPrompt(command, sessid);
+      console.log(result.message.response);
+      setPromptRespone(result.message.response);
+      return;
+    } catch (error) {
+      console.error("Failed to establish sse connection: ", console.error);
+    }
+  };
 
   // Handle scheduling
   const handleScheduleTask = () => {
@@ -252,6 +350,10 @@ export default function SchedulePage() {
               </div>
             </div>
 
+            <div className="text-green-400 font-bold text-xl">
+              {promptRespone}
+            </div>
+
             {/* AI Command */}
             <div className="mb-4">
               <label
@@ -260,6 +362,11 @@ export default function SchedulePage() {
               >
                 AI Command
               </label>
+              <ul>
+                {logs.map((log, index) => (
+                  <li key={index}>{log}</li>
+                ))}
+              </ul>
               <div className="relative">
                 <textarea
                   rows={5} // bigger text area
@@ -328,8 +435,7 @@ export default function SchedulePage() {
                             taskCategory === cat
                               ? colors.primary
                               : colors.backgroundSecondary,
-                          color:
-                            taskCategory === cat ? "#FFFFFF" : colors.text,
+                          color: taskCategory === cat ? "#FFFFFF" : colors.text,
                         }}
                         onClick={() => setTaskCategory(cat)}
                       >
@@ -389,7 +495,7 @@ export default function SchedulePage() {
             </div>
 
             {/* Main Action Button - Lower & Centered */}
-            <div className="mt-4 flex justify-center">
+            <div className="mt-4 flex gap-4 justify-center">
               <Button
                 type="button"
                 variant="primary"
@@ -398,6 +504,15 @@ export default function SchedulePage() {
                 className="px-6 py-2"
               >
                 Schedule Task
+              </Button>
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                onClick={handleRunTask}
+                className="px-6 py-2"
+              >
+                Execute Now
               </Button>
             </div>
 
@@ -412,7 +527,9 @@ export default function SchedulePage() {
               {scheduledTasks.length === 0 ? (
                 <div className="text-center py-6">
                   <FiClock className="mx-auto text-gray-300 w-8 h-8 mb-2" />
-                  <p className="text-gray-500 text-sm">No scheduled tasks found</p>
+                  <p className="text-gray-500 text-sm">
+                    No scheduled tasks found
+                  </p>
                 </div>
               ) : (
                 // 2-col grid with scroll
@@ -459,9 +576,14 @@ export default function SchedulePage() {
                               <motion.button
                                 whileHover={{ scale: 1.1 }}
                                 className="p-1 rounded text-red-600"
-                                style={{ backgroundColor: "rgba(255, 0, 0, 0.1)" }}
+                                style={{
+                                  backgroundColor: "rgba(255, 0, 0, 0.1)",
+                                }}
                                 onClick={() =>
-                                  setDeletePopup({ show: true, taskId: task.id })
+                                  setDeletePopup({
+                                    show: true,
+                                    taskId: task.id,
+                                  })
                                 }
                               >
                                 <FiTrash className="w-4 h-4" />
@@ -475,7 +597,9 @@ export default function SchedulePage() {
                           <div className="flex items-center gap-3 text-xs text-gray-500 mt-2">
                             <div className="flex items-center gap-1">
                               <FiCalendar className="w-4 h-4" />
-                              <span>{formatDateTime(task.scheduleDateTime)}</span>
+                              <span>
+                                {formatDateTime(task.scheduleDateTime)}
+                              </span>
                             </div>
                             {task.dueDate && (
                               <div className="flex items-center gap-1">

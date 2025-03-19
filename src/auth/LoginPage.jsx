@@ -51,7 +51,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       // Using the absolute API endpoint from your old login page
-      const res = await api.post("http://127.0.0.1:8000/auth/login/", { email, password });
+      const res = await api.post("http://ec2-3-91-217-18.compute-1.amazonaws.com:8000/auth/login/", { email, password });
       
       // Store the access token in localStorage for persistent sessions
       localStorage.setItem(ACCESS_TOKEN_KEY, res.data.access);
@@ -59,7 +59,7 @@ export default function LoginPage() {
       // Store tokens in global state using Zustand
       setTokens(res.data.access, res.data.refresh);
       
-      navigate("/dashboard");
+      navigate("/schedule");
     } catch (err) {
       console.error(err);
       setError("Login failed. Please check your credentials and try again.");

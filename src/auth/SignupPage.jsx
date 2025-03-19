@@ -61,7 +61,7 @@ export default function SignupPage() {
     setLoading(true);
     try {
       // Using the absolute API endpoint with tenant_id included
-      const res = await api.post("http://127.0.0.1:8000/auth/signup/", {
+      const res = await api.post("http://ec2-3-91-217-18.compute-1.amazonaws.com:8000/auth/signup/", {
         name,
         tenant_id,
         email,
@@ -69,7 +69,7 @@ export default function SignupPage() {
       });
       // Store the access token in localStorage for persistent sessions
       localStorage.setItem(ACCESS_TOKEN_KEY, res.data.access);
-      navigate("/dashboard");
+      navigate("/login");
     } catch (err) {
       console.error(err);
       setError("Signup failed. Please check your details and try again.");
