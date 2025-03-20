@@ -55,6 +55,8 @@ export default function LoginPage() {
       
       // Store the access token in localStorage for persistent sessions
       localStorage.setItem(ACCESS_TOKEN_KEY, res.data.access);
+      console.log("Access token stored:", res.data.access);
+      console.log("Refresh token stored:", res.data.refresh);
       
       // Store tokens in global state using Zustand
       setTokens(res.data.access, res.data.refresh);
@@ -66,6 +68,7 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+    console.log("The user was logged in successfully")
   };
 
   return (

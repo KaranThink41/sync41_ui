@@ -128,7 +128,7 @@ export default function SchedulePage() {
       eventSource.onmessage = (event) => {
         const parsedData = JSON.parse(event.data);
         console.log("Message received: ", parsedData);
-        if (parsedData.step_type !== "interaction_complete") {
+        if (parsedData.step_type !== "interaction_complete" || "plan_final_response") {
           if (parsedData.response) {
             setLogs((prevLogs) => [...prevLogs, parsedData.response]);
           }
@@ -167,13 +167,54 @@ export default function SchedulePage() {
   };
 
   // Handle scheduling
-  const handleScheduleTask = () => {
+  const handleScheduleTask = async () => {
     if (!command.trim() || !scheduleDate || !scheduleTime) {
       console.log("Missing fields, cannot schedule");
       return;
     }
+    
+    // Create a date object from the user's input
+    const userSelectedDate = new Date(`${scheduleDate}T${scheduleTime}`);
+    
+    // Format the date to match the required format: YYYY-MM-DDThh:mm:ss+05:30
+    const year = userSelectedDate.getFullYear();
+    const month = String(userSelectedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(userSelectedDate.getDate()).padStart(2, '0');
+    const hours = String(userSelectedDate.getHours()).padStart(2, '0');
+    const minutes = String(userSelectedDate.getMinutes()).padStart(2, '0');
+    const seconds = String(userSelectedDate.getSeconds()).padStart(2, '0');
+    
+    const executionTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}+05:30`;
+    
+    // Create the payload with hardcoded values for user_id and is_recurring
+    const taskPayload = {
+      user_id: "590f5d1a-a87f-4ab1-9825-ce25e4a08a75",
+      query: command,
+      execution_time: executionTime,
+      is_recurring: false
+    };
+    
+    console.log("Scheduling task with payload:", taskPayload);
+    
+    try {
+      // Send the payload to the specified endpoint
+      const response = await fetch("http://ec2-3-91-217-18.compute-1.amazonaws.com:8000/schedule/prompt/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(taskPayload),
+      });
+      
+      const responseData = await response.json();
+      console.log("Response:", responseData);
+    } catch (error) {
+      console.error("Error sending payload:", error);
+    }
+    
+    // Continue with the existing functionality
     const combined = new Date(`${scheduleDate}T${scheduleTime}`).toISOString();
-
+    
     const newTask = {
       id: Date.now(),
       command,
@@ -184,9 +225,9 @@ export default function SchedulePage() {
       dueDate,
       status: "scheduled",
     };
-
+    
     setScheduledTasks((prev) => [...prev, newTask]);
-
+    
     // Reset
     setCommand("");
     setScheduleDate("");

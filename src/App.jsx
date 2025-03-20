@@ -13,35 +13,37 @@ import ThemePage from "./layouts/ThemePage";
 import PaddingInternalPages from "./layouts/PaddingInternalPages"; // New layout for internal pages
 
 function App() {
-  // For demonstration, authenticated is true.
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
+  // We are no longer setting an "isAuthenticated" state here since authentication is now based on token availability.
+  // Public pages (Landing, Login, Signup) are accessible without authentication.
+  // Protected pages will check localStorage for a token using ProtectedRoute.
+  
   return (
     <ThemePage>
       <BrowserRouter>
-        {isAuthenticated && <Header />}
+        {/* Show Header if token exists */}
+        {localStorage.getItem("ACCESS_TOKEN_KEY") && <Header />}
 
-        <main className={isAuthenticated ? "w-full px-0" : ""}>
+        <main className={localStorage.getItem("ACCESS_TOKEN_KEY") ? "w-full px-0" : ""}>
           <Routes>
             {/* Public Routes */}
             <Route
               path="/"
-              element={!isAuthenticated ? <LandingPage /> : <Navigate to="/schedule" />}
+              element={!localStorage.getItem("ACCESS_TOKEN_KEY") ? <LandingPage /> : <Navigate to="/schedule" />}
             />
             <Route
               path="/login"
-              element={!isAuthenticated ? <LoginPage /> : <Navigate to="/schedule" />}
+              element={!localStorage.getItem("ACCESS_TOKEN_KEY") ? <LoginPage /> : <Navigate to="/schedule" />}
             />
             <Route
               path="/signup"
-              element={!isAuthenticated ? <SignupPage /> : <Navigate to="/schedule" />}
+              element={!localStorage.getItem("ACCESS_TOKEN_KEY") ? <SignupPage /> : <Navigate to="/schedule" />}
             />
 
             {/* Protected/Internal Routes */}
             <Route
               path="/schedule"
               element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <ProtectedRoute>
                   <PaddingInternalPages>
                     <SchedulePage />
                   </PaddingInternalPages>
@@ -51,7 +53,7 @@ function App() {
             <Route
               path="/schedule/integrations"
               element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <ProtectedRoute>
                   <PaddingInternalPages>
                     <IntegrationPage />
                   </PaddingInternalPages>
@@ -61,7 +63,7 @@ function App() {
             <Route
               path="/schedule/profile"
               element={
-                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <ProtectedRoute>
                   <PaddingInternalPages>
                     <ProfilePage />
                   </PaddingInternalPages>
