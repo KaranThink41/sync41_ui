@@ -39,11 +39,12 @@ export default function Header({ className = "" }) {
       style={{
         backgroundColor: isLandingPage && !isProtectedRoute ? 'rgba(0,0,0,0.2)' : colors.background,
         color: isLandingPage && !isProtectedRoute ? 'white' : colors.text,
+        position: "fixed",
       }}
     >
       {/* Use the same 150px horizontal padding as PaddingInternalPages */}
       <div
-        className="py-1.2"
+        className="py-2"
         style={{
           paddingLeft: "306px",
           paddingRight: "306px",

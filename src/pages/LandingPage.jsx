@@ -93,6 +93,11 @@ const testimonials = [
     quote: "The security features and compliance standards of Sync41 gave us confidence to move our entire enterprise stack to their platform.",
     author: "Sripathi Krishnan",
     position: "Co-founder @ Think41"
+  },
+  {
+    quote: "The scalability of Sync41's platform allowed us to grow our operations without worrying about system limitations or performance issues.",
+    author: "Harshit Singhal",
+    position: "Co-founder @ Think41"
   }
 ];
 
@@ -340,25 +345,25 @@ export default function LandingPage() {
               See what our clients have to say about their experience with our platform.
             </motion.p>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {testimonials.map((testimonial, index) => (
                 <motion.div
                   key={index}
-                  className="p-8 bg-white rounded-xl shadow-lg border border-gray-100"
+                  className="p-6 bg-white rounded-xl shadow-lg border border-gray-100"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                 >
                   <div className="mb-4 text-[#1D72D1]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M6.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35.208-.086.39-.16.539-.222.302-.125.474-.197.474-.197L9.758 4.03c0 0-.218.052-.597.144C8.97 4.222 8.737 4.278 8.472 4.345c-.271.05-.56.187-.882.312C7.272 4.799 6.904 4.895 6.562 5.123c-.344.218-.741.4-1.091.692C5.132 6.116 4.723 6.377 4.421 6.76c-.33.358-.656.734-.909 1.162C3.219 8.33 3.02 8.778 2.81 9.221c-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539.017.109.025.168.025.168l.026-.006C2.535 17.474 4.338 19 6.5 19c2.485 0 4.5-2.015 4.5-4.5S8.985 10 6.5 10zM17.5 10c-.223 0-.437.034-.65.065.069-.232.14-.468.254-.68.114-.308.292-.575.469-.844.148-.291.409-.488.601-.737.201-.242.475-.403.692-.604.213-.21.492-.315.714-.463.232-.133.434-.28.65-.35.208-.086.39-.16.539-.222.302-.125.474-.197.474-.197L20.758 4.03c0 0-.218.052-.597.144-.191.048-.424.104-.689.171-.271.05-.56.187-.882.312-.317.143-.686.238-1.028.467-.344.218-.741.4-1.091.692-.339.301-.748.562-1.05.944-.33.358-.656.734-.909 1.162C14.219 8.33 14.02 8.778 13.81 9.221c-.19.443-.343.896-.468 1.336-.237.882-.343 1.72-.384 2.437-.034.718-.014 1.315.028 1.747.015.204.043.402.063.539.017.109.025.168.025.168l.026-.006C13.535 17.474 15.338 19 17.5 19c2.485 0 4.5-2.015 4.5-4.5S19.985 10 17.5 10z" />
                     </svg>
                   </div>
-                  <p className="text-gray-700 italic mb-6">{testimonial.quote}</p>
+                  <p className="text-gray-700 italic mb-4 text-sm">{testimonial.quote}</p>
                   <div>
                     <p className="font-bold text-gray-900">{testimonial.author}</p>
-                    <p className="text-gray-600">{testimonial.position}</p>
+                    <p className="text-gray-600 text-sm">{testimonial.position}</p>
                   </div>
                 </motion.div>
               ))}
