@@ -17,11 +17,11 @@ import { ACCESS_TOKEN_KEY } from "../constants";
 import api from "../api";
 import Button from "../components/Button";
 import { useTheme } from "../layouts/ThemePage";
+import { useTenantStore } from "../store/tenantStore";
 
 export default function SignupPage() {
   // Tenant ID from your old signup page
-  const tenant_id = "708d3f5f-de53-40ff-b531-3f7a6fab4844";
-  const { colors } = useTheme();
+  const { tenantId } = useTenantStore();  const { colors } = useTheme();
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -63,7 +63,7 @@ export default function SignupPage() {
       // Using the absolute API endpoint with tenant_id included
       const res = await api.post("http://ec2-3-91-217-18.compute-1.amazonaws.com:8000/auth/signup/", {
         name,
-        tenant_id,
+        tenantId,
         email,
         password,
       });

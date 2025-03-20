@@ -1,5 +1,4 @@
 // src/pages/LandingPage.jsx
-
 import React, { useState, Suspense } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -8,7 +7,7 @@ import { Canvas } from "@react-three/fiber";
 import { Stars, OrbitControls } from "@react-three/drei";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { useTheme } from "../layouts/ThemePage";
-import Header from "../components/Header";
+import LandingNavbar from "../components/LandingNavbar";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -25,16 +24,16 @@ const ParticleField = () => {
     >
       <Canvas>
         <Stars
-          radius={150} // Reduced radius
-          depth={80} // Reduced depth
-          count={4000} // reduced count
+          radius={150}
+          depth={80}
+          count={4000}
           factor={6}
           saturation={0.2}
           fade
           speed={0.3}
           color="#FFFFFF"
-          size={20} // increased size
-          sizeAttenuation={false} // disabled attenuation
+          size={20}
+          sizeAttenuation={false}
         />
         <OrbitControls enableZoom={false} autoRotate enablePan={false} />
         <ambientLight intensity={0.5} />
@@ -77,32 +76,34 @@ const processSteps = [
   },
 ];
 
+// -------------------------------
 // Testimonials for social proof
+// -------------------------------
 const testimonials = [
   {
     quote: "Sync41 transformed our workflow efficiency by 300%. The integration capabilities are unmatched in the industry.",
     author: "Anshuman Singh",
-    position: "Co-founder @ Think41"
+    position: "Co-founder @ Think41",
   },
   {
     quote: "After implementing Sync41, our team saved 20 hours per week on manual data transfers. The ROI was immediate.",
     author: "Himanshu Varshney",
-    position: "Co-founder @ Think41"
+    position: "Co-founder @ Think41",
   },
   {
     quote: "The security features and compliance standards of Sync41 gave us confidence to move our entire enterprise stack to their platform.",
     author: "Sripathi Krishnan",
-    position: "Co-founder @ Think41"
+    position: "Co-founder @ Think41",
   },
   {
     quote: "The scalability of Sync41's platform allowed us to grow our operations without worrying about system limitations or performance issues.",
     author: "Harshit Singhal",
-    position: "Co-founder @ Think41"
-  }
+    position: "Co-founder @ Think41",
+  },
 ];
 
 export default function LandingPage() {
-  const { scrollYProgress } = useScroll();
+  const { scrollYProgress, } = useScroll();
   const { colors } = useTheme();
 
   // Progress bar animation at the top of the page
@@ -122,8 +123,8 @@ export default function LandingPage() {
   return (
     <ErrorBoundary>
       <div className="relative font-roboto">
-        {/* Header with semi-transparent background */}
-        <Header />
+        {/* Removed Header so it does not appear on Landing Page */}
+        <LandingNavbar/>
 
         {/* Top Progress Bar */}
         <motion.div
@@ -187,7 +188,7 @@ export default function LandingPage() {
               </Link>
             </motion.div>
 
-            {/* New Scroll Down Indicator */}
+            {/* Scroll Down Indicator */}
             <motion.div
               className="mt-64 cursor-pointer"
               initial={{ opacity: 0 }}
@@ -264,10 +265,7 @@ export default function LandingPage() {
         </section>
 
         {/* PROCESS SECTION (Horizontal auto-scroll) */}
-        <section
-          className="py-20"
-          style={{ backgroundColor: colors.background }}
-        >
+        <section className="py-20" style={{ backgroundColor: colors.background }}>
           <div className="max-w-7xl mx-auto px-6">
             <motion.h2
               className="text-4xl font-bold text-center mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#1D72D1] to-[#6D3BF5] font-montserrat"
@@ -294,13 +292,13 @@ export default function LandingPage() {
                 className="flex gap-8"
                 style={{ x: 0 }}
                 animate={{
-                  x: isHovering ? 0 : ["0%", "-100%"], // auto-scroll from 0% to -100%
+                  x: isHovering ? 0 : ["0%", "-100%"],
                 }}
                 transition={{
                   repeat: Infinity,
                   repeatType: "loop",
                   ease: "linear",
-                  duration: 20, // Adjust speed here
+                  duration: 20,
                 }}
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
@@ -412,42 +410,95 @@ export default function LandingPage() {
               <div>
                 <h4 className="text-lg font-bold mb-4 text-white">Product</h4>
                 <ul className="space-y-2">
-                  <li><Link to="/features" className="hover:text-white transition-colors">Features</Link></li>
-                  <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-                  <li><Link to="/integrations" className="hover:text-white transition-colors">Integrations</Link></li>
-                  <li><Link to="/enterprise" className="hover:text-white transition-colors">Enterprise</Link></li>
+                  <li>
+                    <Link to="/features" className="hover:text-white transition-colors">
+                      Features
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/pricing" className="hover:text-white transition-colors">
+                      Pricing
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/integrations" className="hover:text-white transition-colors">
+                      Integrations
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/enterprise" className="hover:text-white transition-colors">
+                      Enterprise
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div>
                 <h4 className="text-lg font-bold mb-4 text-white">Resources</h4>
                 <ul className="space-y-2">
-                  <li><Link to="/documentation" className="hover:text-white transition-colors">Documentation</Link></li>
-                  <li><Link to="/api" className="hover:text-white transition-colors">API Reference</Link></li>
-                  <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
-                  <li><Link to="/support" className="hover:text-white transition-colors">Support</Link></li>
+                  <li>
+                    <Link to="/documentation" className="hover:text-white transition-colors">
+                      Documentation
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/api" className="hover:text-white transition-colors">
+                      API Reference
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/blog" className="hover:text-white transition-colors">
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/support" className="hover:text-white transition-colors">
+                      Support
+                    </Link>
+                  </li>
                 </ul>
               </div>
               <div>
                 <h4 className="text-lg font-bold mb-4 text-white">Company</h4>
                 <ul className="space-y-2">
-                  <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-                  <li><Link to="/careers" className="hover:text-white transition-colors">Careers</Link></li>
-                  <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-                  <li><Link to="/partners" className="hover:text-white transition-colors">Partners</Link></li>
+                  <li>
+                    <Link to="/about" className="hover:text-white transition-colors">
+                      About Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/careers" className="hover:text-white transition-colors">
+                      Careers
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contact" className="hover:text-white transition-colors">
+                      Contact
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/partners" className="hover:text-white transition-colors">
+                      Partners
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
             <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-              <p className="text-sm text-gray-500 mb-4 md:mb-0"> 2025 Sync41 Technologies. All rights reserved.</p>
+              <p className="text-sm text-gray-500 mb-4 md:mb-0">2025 Sync41 Technologies. All rights reserved.</p>
               <div className="flex space-x-6">
-                <Link to="/privacy" className="text-sm text-gray-500 hover:text-white">Privacy Policy</Link>
-                <Link to="/terms" className="text-sm text-gray-500 hover:text-white">Terms of Service</Link>
-                <Link to="/cookies" className="text-sm text-gray-500 hover:text-white">Cookie Policy</Link>
+                <Link to="/privacy" className="text-sm text-gray-500 hover:text-white">
+                  Privacy Policy
+                </Link>
+                <Link to="/terms" className="text-sm text-gray-500 hover:text-white">
+                  Terms of Service
+                </Link>
+                <Link to="/cookies" className="text-sm text-gray-500 hover:text-white">
+                  Cookie Policy
+                </Link>
               </div>
             </div>
           </div>
         </footer>
-
       </div>
     </ErrorBoundary>
   );

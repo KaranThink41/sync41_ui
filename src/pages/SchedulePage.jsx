@@ -346,6 +346,7 @@ export default function SchedulePage() {
           }
         `}
       </style>
+      
       <PaddingInternalPages>
         {/* Slightly smaller gap from top */}
         <div className="mt-6 grid grid-cols-1 lg:grid-cols-5 gap-6 text-base">

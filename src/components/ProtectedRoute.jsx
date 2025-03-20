@@ -1,42 +1,33 @@
-// src/components/ProtectedRoute.jsx
-import { Navigate } from "react-router-dom";
-import { ACCESS_TOKEN_KEY } from "../constants";
-import { useEffect, useState } from "react";
+// src/layouts/PaddingInternalPages.jsx
+import React from "react";
+import { useTheme } from "../layouts/ThemePage";
+import ErrorBoundary from "../components/ErrorBoundary";
+import ProtectedNavbar from "../components/ProtectedNavbar"; // <-- Import your ProtectedNavbar here
 
-function ProtectedRoute({ children }) {
-  // authState: null means "loading", then true (authenticated) or false.
-  const [authState, setAuthState] = useState(null);
+/**
+ * PaddingInternalPages layout that adds horizontal padding
+ * and now also includes the ProtectedNavbar for post-login pages.
+ */
+export default function PaddingInternalPages({ children }) {
+  const { colors } = useTheme();
 
-  useEffect(() => {
-    let isMounted = true;
-    const checkAuth = async () => {
-      const token = localStorage.getItem(ACCESS_TOKEN_KEY);
-      // If no token, user is NOT authenticated.
-      if (!token) {
-        if (isMounted) setAuthState(false);
-        return;
-      }
-      // Otherwise, if a token is found, assume it's valid (for now).
-      try {
-        // You can add an API call here to verify the token if required.
-        if (isMounted) setAuthState(true);
-      } catch (err) {
-        console.error("Auth error:", err);
-        if (isMounted) setAuthState(false);
-      }
-    };
-    checkAuth();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  return (
+    <ErrorBoundary>
+      {/* Always show ProtectedNavbar for internal pages */}
+      <ProtectedNavbar />
 
-  if (authState === null) {
-    return <div>Loading...</div>;
-  }
-
-  // If not authenticated, redirect to login.
-  return authState ? children : <Navigate to="/login" />;
+      <div
+        className="min-h-screen font-roboto bg-background text-text"
+        style={{
+          paddingLeft: "150px",
+          paddingRight: "150px",
+          paddingTop: "30px", // gap below header
+          backgroundColor: colors.background,
+          color: colors.text,
+        }}
+      >
+        {children}
+      </div>
+    </ErrorBoundary>
+  );
 }
-
-export default ProtectedRoute;
