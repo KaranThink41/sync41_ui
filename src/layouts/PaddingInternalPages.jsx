@@ -18,6 +18,7 @@ export default function PaddingInternalPages({ children }) {
         style={{
           paddingLeft: "150px",
           paddingRight: "150px",
+          paddingTop: "30px", // Added vertical spacing to create gap below header
           backgroundColor: colors.background,
           color: colors.text,
         }}

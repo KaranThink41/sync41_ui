@@ -128,14 +128,16 @@ export default function SchedulePage() {
       eventSource.onmessage = (event) => {
         const parsedData = JSON.parse(event.data);
         console.log("Message received: ", parsedData);
-        if (parsedData.response) {
-          setLogs((prevLogs) => [...prevLogs, parsedData.response]);
-        }
-        if (parsedData.step_type === "execute_action") {
-          setLogs((prevLogs) => [
-            ...prevLogs,
-            "Executing tool: " + parsedData.executed_action_id,
-          ]);
+        if (parsedData.step_type !== "interaction_complete") {
+          if (parsedData.response) {
+            setLogs((prevLogs) => [...prevLogs, parsedData.response]);
+          }
+          if (parsedData.step_type === "execute_action") {
+            setLogs((prevLogs) => [
+              ...prevLogs,
+              "Executing tool: " + parsedData.executed_action_id,
+            ]);
+          }
         }
       };
 
